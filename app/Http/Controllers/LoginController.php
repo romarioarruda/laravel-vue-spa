@@ -21,7 +21,7 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if ($user = User::select('id', 'name', 'email', 'remember_token')->where($credentials)->first()) {
+        if ($user = User::select('id', 'name', 'email')->where($credentials)->first()) {
             return response()->json($user, 200);
         } else {
             return response()->json(['error' => 'Usuário ou senha inválidos.'], 401);
