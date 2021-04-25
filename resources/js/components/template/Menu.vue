@@ -13,23 +13,29 @@
     </nav>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import axios from 'axios'
 export default {
     name: 'Menu',
     methods: {           
         logout () {
             this.$toasted.global.defaultInfo({ msg: 'Deslogando...' })
+            axios.defaults.headers['authorization'] = this.getFullToken
             axios.post('/public/api/logout').then(resp => {
                 this.destroySession
                 localStorage.removeItem('vuex')
                 this.$router.push({ name: 'formlogin' })
+                delete axios.defaults.headers.authorization
             })
         }
     },
     computed: {
+        ...mapState({
+            user: state => state.user
+        }),
         ...mapGetters('user', [
-            'destroySession'
+            'destroySession',
+            'getFullToken'
         ])
     }
 }

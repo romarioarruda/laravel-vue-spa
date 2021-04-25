@@ -37,6 +37,10 @@ const mutations = {
 }
 
 const getters = {
+    getFullToken (state) {
+        return state.accessToken.token_type +' '+ state.accessToken.access_token
+    },
+
     destroySession (state) {
         state.accessToken = {}
         state.userData = {}

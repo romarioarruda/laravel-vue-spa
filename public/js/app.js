@@ -1897,11 +1897,13 @@ __webpack_require__.r(__webpack_exports__);
           email: this.mail,
           password: this.pass
         };
-        axios__WEBPACK_IMPORTED_MODULE_0___default().post('/public/auth/login', payload).then(function (resp) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post('/public/api/login', payload).then(function (resp) {
           _this.loading = false;
 
-          if (resp.data.id) {
-            _this.$store.dispatch('user/setUserData', resp.data);
+          if (resp.data.token) {
+            _this.$store.dispatch('user/setAccessToken', resp.data.token);
+
+            _this.$store.dispatch('user/setUserData', resp.data.user);
 
             _this.$router.push({
               name: 'todo'
@@ -1980,7 +1982,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ToDoFinished: _todo_ToDoFinished__WEBPACK_IMPORTED_MODULE_4__.default
   },
   mounted: function mounted() {
-    if (!this.user.userData.id) {
+    console.log(this.user);
+
+    if (!this.user.accessToken.access_token) {
       this.$router.push({
         name: 'formlogin'
       });
@@ -2043,17 +2047,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$toasted.global.defaultInfo({
         msg: 'Deslogando...'
       });
-      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/auth/logout').then(function (resp) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/logout').then(function (resp) {
         _this.destroySession;
         localStorage.removeItem('vuex');
 
         _this.$router.push({
           name: 'formlogin'
         });
+
+        delete (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization);
       });
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession']))
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
+    user: function user(state) {
+      return state.user;
+    }
+  })), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
 });
 
 /***/ }),
@@ -2582,11 +2593,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  userData: {}
+  userData: {},
+  accessToken: {}
 };
 var actions = {
-  setUserData: function setUserData(_ref, payload) {
+  setAccessToken: function setAccessToken(_ref, payload) {
     var commit = _ref.commit;
+    return new Promise(function (resolve, reject) {
+      if (payload.access_token) {
+        commit('M/setAccessToken', payload);
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  },
+  setUserData: function setUserData(_ref2, payload) {
+    var commit = _ref2.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/setUserData', payload);
@@ -2598,12 +2621,19 @@ var actions = {
   }
 };
 var mutations = {
+  'M/setAccessToken': function MSetAccessToken(state, payload) {
+    state.accessToken = payload;
+  },
   'M/setUserData': function MSetUserData(state, payload) {
     state.userData = payload;
   }
 };
 var getters = {
+  getFullToken: function getFullToken(state) {
+    return state.accessToken.token_type + ' ' + state.accessToken.access_token;
+  },
   destroySession: function destroySession(state) {
+    state.accessToken = {};
     state.userData = {};
   }
 };

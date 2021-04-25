@@ -24,6 +24,7 @@ export default {
         ToDoFinished
     },
     mounted () {
+        console.log(this.user)
         if (!this.user.accessToken.access_token) {
             this.$router.push({ name: 'formlogin' })
         }

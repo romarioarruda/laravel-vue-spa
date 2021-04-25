@@ -25,23 +25,26 @@ class LoginController extends Controller
         $user = User::where($credentials)->first();
 
         if (!$user) {
-            return response()->json(['error' => 'Usuário não identificado.'], 401);
+            return response()->json(['error' => 'Usuário não identificado.'], 404);
         }
 
         if (!$token = auth('api')->login($user)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user);
         
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'user' => $user,
+            'token' => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ]
         ]);
     }
 

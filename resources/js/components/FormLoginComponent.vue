@@ -49,8 +49,9 @@ export default {
 
                 axios.post('/public/api/login', payload).then(resp => {
                     this.loading = false
-                    if (resp.data.access_token) {
-                        this.$store.dispatch('user/setAccessToken', resp.data)
+                    if (resp.data.token) {
+                        this.$store.dispatch('user/setAccessToken', resp.data.token)
+                        this.$store.dispatch('user/setUserData', resp.data.user)
                         this.$router.push({ name: 'todo' })
                     }
                 }).catch(msg => {
