@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand">
                 <img src="https://getbootstrap.com/docs/4.6/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="logo">
             </a>
             <ul class="navbar-nav">
@@ -13,7 +13,7 @@
     </nav>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 export default {
     name: 'Menu',
@@ -30,9 +30,6 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            user: state => state.user
-        }),
         ...mapGetters('user', [
             'destroySession',
             'getFullToken'

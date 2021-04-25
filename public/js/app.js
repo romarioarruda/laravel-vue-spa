@@ -2060,11 +2060,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
-    user: function user(state) {
-      return state.user;
-    }
-  })), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
 });
 
 /***/ }),
@@ -39962,7 +39958,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
+    return _c("a", { staticClass: "navbar-brand" }, [
       _c("img", {
         attrs: {
           src:
