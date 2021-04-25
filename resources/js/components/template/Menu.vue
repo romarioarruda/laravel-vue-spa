@@ -20,7 +20,7 @@ export default {
     methods: {           
         logout () {
             this.$toasted.global.defaultInfo({ msg: 'Deslogando...' })
-            axios.post('/public/auth/logout').then(resp => {
+            axios.post('/public/api/logout').then(resp => {
                 this.destroySession
                 localStorage.removeItem('vuex')
                 this.$router.push({ name: 'formlogin' })

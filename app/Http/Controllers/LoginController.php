@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -11,7 +12,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $errors = $this->validate($request, [
+        $this->validate($request, [
             'email' => 'required',
             'password' => 'required'
         ],[
@@ -21,18 +22,33 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if ($user = User::select('id', 'name', 'email')->where($credentials)->first()) {
-            return response()->json($user, 200);
-        } else {
-            return response()->json(['error' => 'Usuário ou senha inválidos.'], 401);
+        $user = User::where($credentials)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não identificado.'], 401);
         }
+
+        if (!$token = auth('api')->login($user)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
         
     }
 
-    public function logout(Request $request)
+    protected function respondWithToken($token)
     {
-        $request->session()->invalidate();
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
 
-        $request->session()->regenerateToken();
+    public function logout()
+    {
+        auth('api')->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }

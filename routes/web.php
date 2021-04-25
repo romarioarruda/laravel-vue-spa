@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +16,3 @@ use App\Http\Controllers\LoginController;
 Route::get('/', function () {
     return view('login');
 });
-
-Route::post('/auth/login', [LoginController::class, 'login']);
-Route::post('/auth/logout', [LoginController::class, 'logout']);

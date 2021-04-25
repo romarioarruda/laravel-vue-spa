@@ -7,8 +7,18 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function users()
+
+    public function refresh()
     {
-        return User::all();
+        return $this->respondWithToken(auth('api')->refresh());
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
     }
 }

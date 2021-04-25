@@ -47,10 +47,10 @@ export default {
                     password: this.pass
                 }
 
-                axios.post('/public/auth/login', payload).then(resp => {
+                axios.post('/public/api/login', payload).then(resp => {
                     this.loading = false
-                    if (resp.data.id) {
-                        this.$store.dispatch('user/setUserData', resp.data)
+                    if (resp.data.access_token) {
+                        this.$store.dispatch('user/setAccessToken', resp.data)
                         this.$router.push({ name: 'todo' })
                     }
                 }).catch(msg => {

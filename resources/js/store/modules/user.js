@@ -1,7 +1,19 @@
 const state = {
-    userData: {}
+    userData: {},
+    accessToken: {}
 }
 const actions = {
+    setAccessToken ({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            if (payload.access_token) {
+                commit('M/setAccessToken', payload)
+                resolve()
+            } else {
+                reject()
+            }
+        })
+    },
+
     setUserData ({commit}, payload) {
         return new Promise((resolve, reject) => {
             if (payload.id) {
@@ -15,6 +27,10 @@ const actions = {
 }
 
 const mutations = {
+    'M/setAccessToken' (state, payload) {
+        state.accessToken = payload
+    },
+
     'M/setUserData' (state, payload) {
         state.userData = payload
     }
@@ -22,6 +38,7 @@ const mutations = {
 
 const getters = {
     destroySession (state) {
+        state.accessToken = {}
         state.userData = {}
     }
 }
