@@ -1999,7 +1999,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     user: function user(state) {
       return state.user;
     }
-  })), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)('user', ['cronRefreshToken'])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
+  })), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)('user', ['cronRefreshToken', 'destroySession'])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2062,7 +2062,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)('user', ['destroySession'])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2638,6 +2638,11 @@ var actions = {
         }
       });
     }, time);
+  },
+  destroySession: function destroySession(_ref4) {
+    var commit = _ref4.commit;
+    commit('M/setAccessToken', {});
+    commit('M/setUserData', {});
   }
 };
 var mutations = {
@@ -2651,10 +2656,6 @@ var mutations = {
 var getters = {
   getFullToken: function getFullToken(state) {
     return state.accessToken.token_type + ' ' + state.accessToken.access_token;
-  },
-  destroySession: function destroySession(state) {
-    state.accessToken = {};
-    state.userData = {};
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

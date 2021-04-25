@@ -37,9 +37,11 @@ export default {
             todo: state => state.todo,
             user: state => state.user
         }),
-        ...mapActions('user', ['cronRefreshToken']),
+        ...mapActions('user', [
+            'cronRefreshToken',
+            'destroySession'
+        ]),
         ...mapGetters('user', [
-            'destroySession',
             'getFullToken'
         ])
     }

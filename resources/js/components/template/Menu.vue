@@ -13,7 +13,7 @@
     </nav>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 export default {
     name: 'Menu',
@@ -30,8 +30,10 @@ export default {
         }
     },
     computed: {
+        ...mapActions('user', [
+            'destroySession'
+        ]),
         ...mapGetters('user', [
-            'destroySession',
             'getFullToken'
         ])
     }
