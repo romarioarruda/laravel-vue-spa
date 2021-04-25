@@ -1982,15 +1982,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ToDoFinished: _todo_ToDoFinished__WEBPACK_IMPORTED_MODULE_4__.default
   },
   mounted: function mounted() {
-    if (this.user.accessToken.access_token) {
-      this.cronRefreshToken;
-    }
-
     if (!this.user.accessToken.access_token) {
       this.$router.push({
         name: 'formlogin'
       });
     }
+
+    this.cronRefreshToken;
   },
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
     todo: function todo(state) {

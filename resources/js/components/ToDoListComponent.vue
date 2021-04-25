@@ -24,13 +24,11 @@ export default {
         ToDoFinished
     },
     mounted () {
-        if (this.user.accessToken.access_token) {
-            this.cronRefreshToken
-        }
-
         if (!this.user.accessToken.access_token) {
             this.$router.push({ name: 'formlogin' })
         }
+
+        this.cronRefreshToken
     },
     computed: {
         ...mapState({
