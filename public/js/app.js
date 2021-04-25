@@ -1982,7 +1982,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ToDoFinished: _todo_ToDoFinished__WEBPACK_IMPORTED_MODULE_4__.default
   },
   mounted: function mounted() {
-    console.log(this.user);
+    if (this.user.accessToken.access_token) {
+      this.cronRefreshToken;
+    }
 
     if (!this.user.accessToken.access_token) {
       this.$router.push({
@@ -1990,14 +1992,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
     todo: function todo(state) {
       return state.todo;
     },
     user: function user(state) {
       return state.user;
     }
-  }))
+  })), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)('user', ['cronRefreshToken'])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['destroySession', 'getFullToken']))
 });
 
 /***/ }),
@@ -2588,6 +2590,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 var state = {
   userData: {},
   accessToken: {}
@@ -2614,6 +2619,25 @@ var actions = {
         reject();
       }
     });
+  },
+  cronRefreshToken: function cronRefreshToken(_ref3) {
+    var commit = _ref3.commit,
+        state = _ref3.state;
+    var time = 60 * 1000 * 60; // uma hora
+
+    var timer = setInterval(function () {
+      if (typeof state.accessToken.access_token === 'undefined') {
+        clearInterval(timer);
+      }
+
+      console.log('cronRefreshToken job rodando...');
+      (axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.headers.authorization) = state.accessToken.token_type + ' ' + state.accessToken.access_token;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/public/api/refresh').then(function (resp) {
+        if (resp.data.access_token) {
+          commit('M/setAccessToken', resp.data);
+        }
+      });
+    }, time);
   }
 };
 var mutations = {

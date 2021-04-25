@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Menu from './template/Menu'
 import ToDo from './todo/ToDo'
 import ToDoDoing from './todo/ToDoDoing'
@@ -24,7 +24,10 @@ export default {
         ToDoFinished
     },
     mounted () {
-        console.log(this.user)
+        if (this.user.accessToken.access_token) {
+            this.cronRefreshToken
+        }
+
         if (!this.user.accessToken.access_token) {
             this.$router.push({ name: 'formlogin' })
         }
@@ -33,7 +36,12 @@ export default {
         ...mapState({
             todo: state => state.todo,
             user: state => state.user
-        })
+        }),
+        ...mapActions('user', ['cronRefreshToken']),
+        ...mapGetters('user', [
+            'destroySession',
+            'getFullToken'
+        ])
     }
 }
 </script>
