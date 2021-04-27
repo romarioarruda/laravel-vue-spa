@@ -4,10 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
-use App\Models\User;
-
-class UserAuth
+class UserAuth extends BaseMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,8 +19,16 @@ class UserAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->header('Authorization')) {
-            return response()->json(['error' => 'Unauthorized.'], 401);
+        try {
+            JWTAuth::parseToken()->authenticate();
+        } catch (\Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['middleareError' => 'Token is Invalid']);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['middleareError' => 'Token is Expired']);
+            }else{
+                return response()->json(['middleareError' => 'Authorization Token not found']);
+            }
         }
 
         return $next($request);

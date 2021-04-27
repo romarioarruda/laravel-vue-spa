@@ -12,10 +12,10 @@ class TodoController extends Controller
         return Todo::all();
     }
 
-    public function listTodoPerUser(Request $request)
+    public function listTodoPerUser(int $userId)
     {
-        $userData = $request->only('user_id');
+        $todoByUser = Todo::where('user_id', $userId)->get();
 
-        return Todo::where($userData)->get();
+        return $todoByUser ?? [];
     }
 }
