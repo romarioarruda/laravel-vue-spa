@@ -12,5 +12,7 @@ Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::post('/refresh', [UserController::class, 'refresh'])->middleware('auth');
 
-Route::get('/todo/list', [TodoController::class, 'listTodo'])->middleware('auth');
-Route::get('/todo/user/{user_id}', [TodoController::class, 'listTodoPerUser'])->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/todo/list', [TodoController::class, 'listTodo']);
+    Route::get('/todo/user/{user_id}', [TodoController::class, 'listTodoPerUser']);
+});
