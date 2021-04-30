@@ -4,9 +4,8 @@
             <h3 class="text-center">A Fazer</h3>
         </div>
         <div class="card-body">
-            <dnd-zone
-            vertical-search
-            >
+            <Loading v-if="loading" />
+            <dnd-zone v-else vertical-search>
                 <dnd-container
                     :dnd-model="todoList"
                     dnd-id="todoList"
@@ -29,8 +28,10 @@
 </template>
 
 <script>
+import Loading from '../template/Loading'
 export default {
     props: [ 'todoList' ],
+    components: { Loading },
     methods: {
         doing (payload) {
             this.$store.dispatch('todo/setTaskDoing', payload).then(resp => {
@@ -45,6 +46,12 @@ export default {
             }).catch(msg => {
                 this.$toasted.global.defaultError({ msg: resp })
             })
+        }
+    },
+
+    computed: {
+        loading () {
+            return !this.todoList.length
         }
     }
 }
