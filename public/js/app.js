@@ -2178,6 +2178,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
 //
 //
 //
@@ -2207,9 +2208,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['todoListDoing'],
+  components: {
+    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_0__.default
+  },
   methods: {
     returnToDo: function returnToDo(payload) {
       var _this = this;
@@ -2237,6 +2241,11 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     }
+  },
+  computed: {
+    loading: function loading() {
+      return !this.todoListDoing.length;
+    }
   }
 });
 
@@ -2253,6 +2262,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
 //
 //
 //
@@ -2283,9 +2293,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['todoListFinished'],
+  components: {
+    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_0__.default
+  },
   methods: {
     returnToDo: function returnToDo(payload) {
       var _this = this;
@@ -2325,6 +2338,11 @@ __webpack_require__.r(__webpack_exports__);
           msg: resp
         });
       });
+    }
+  },
+  computed: {
+    loading: function loading() {
+      return !this.todoListFinished.length;
     }
   }
 });
@@ -2518,7 +2536,7 @@ var actions = {
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/returnTaskToDo', payload);
-        resolve('Tarefa retornou para a lista de afazeres.');
+        resolve('Tarefa retornou para a lista de a fazeres.');
       } else {
         reject('ID da tarefa não foi detectado');
       }
@@ -40265,73 +40283,77 @@ var render = function() {
       "div",
       { staticClass: "card-body" },
       [
-        _c(
-          "dnd-zone",
-          { attrs: { "vertical-search": "" } },
-          [
-            _c(
-              "dnd-container",
-              {
-                attrs: {
-                  "dnd-model": _vm.todoListDoing,
-                  "dnd-id": "todoListDoing"
-                }
-              },
+        _vm.loading
+          ? _c("Loading")
+          : _c(
+              "dnd-zone",
+              { attrs: { "vertical-search": "" } },
               [
-                _vm._l(_vm.todoListDoing, function(card) {
-                  return [
-                    _c(
-                      "dnd-item",
-                      {
-                        key: card.id,
-                        attrs: { "dnd-model": card, "dnd-id": card.id }
-                      },
-                      [
+                _c(
+                  "dnd-container",
+                  {
+                    attrs: {
+                      "dnd-model": _vm.todoListDoing,
+                      "dnd-id": "todoListDoing"
+                    }
+                  },
+                  [
+                    _vm._l(_vm.todoListDoing, function(card) {
+                      return [
                         _c(
-                          "div",
-                          { key: card.id, staticClass: "card area-card" },
+                          "dnd-item",
+                          {
+                            key: card.id,
+                            attrs: { "dnd-model": card, "dnd-id": card.id }
+                          },
                           [
-                            _c("span", [_vm._v(_vm._s(card.titulo))]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "area-buttons" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-outline-danger btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.returnToDo(card)
-                                    }
-                                  }
-                                },
-                                [_vm._v("A fazer")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-outline-success btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.finished(card)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Concluir")]
-                              )
-                            ])
+                            _c(
+                              "div",
+                              { key: card.id, staticClass: "card area-card" },
+                              [
+                                _c("span", [_vm._v(_vm._s(card.titulo))]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "area-buttons" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-danger btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.returnToDo(card)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("A fazer")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-success btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.finished(card)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Concluir")]
+                                  )
+                                ])
+                              ]
+                            )
                           ]
                         )
                       ]
-                    )
-                  ]
-                })
+                    })
+                  ],
+                  2
+                )
               ],
-              2
+              1
             )
-          ],
-          1
-        )
       ],
       1
     )
@@ -40376,86 +40398,91 @@ var render = function() {
       "div",
       { staticClass: "card-body" },
       [
-        _c(
-          "dnd-zone",
-          { attrs: { "vertical-search": "" } },
-          [
-            _c(
-              "dnd-container",
-              {
-                attrs: {
-                  "dnd-model": _vm.todoListFinished,
-                  "dnd-id": "todoListFinished"
-                }
-              },
+        _vm.loading
+          ? _c("Loading")
+          : _c(
+              "dnd-zone",
+              { attrs: { "vertical-search": "" } },
               [
-                _vm._l(_vm.todoListFinished, function(card) {
-                  return [
-                    _c(
-                      "dnd-item",
-                      {
-                        key: card.id,
-                        attrs: { "dnd-model": card, "dnd-id": card.id }
-                      },
-                      [
+                _c(
+                  "dnd-container",
+                  {
+                    attrs: {
+                      "dnd-model": _vm.todoListFinished,
+                      "dnd-id": "todoListFinished"
+                    }
+                  },
+                  [
+                    _vm._l(_vm.todoListFinished, function(card) {
+                      return [
                         _c(
-                          "div",
-                          { key: card.id, staticClass: "card area-card" },
+                          "dnd-item",
+                          {
+                            key: card.id,
+                            attrs: { "dnd-model": card, "dnd-id": card.id }
+                          },
                           [
-                            _c("span", [_vm._v(_vm._s(card.titulo))]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "area-buttons" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-outline-info btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.returnToDoing(card)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Refazer")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-outline-primary btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.returnToDo(card)
-                                    }
-                                  }
-                                },
-                                [_vm._v("A fazer")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-outline-danger btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.remove(card.id)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Deletar")]
-                              )
-                            ])
+                            _c(
+                              "div",
+                              { key: card.id, staticClass: "card area-card" },
+                              [
+                                _c("span", [_vm._v(_vm._s(card.titulo))]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "area-buttons" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-info btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.returnToDoing(card)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Refazer")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-primary btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.returnToDo(card)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("A fazer")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-danger btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.remove(card.id)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Deletar")]
+                                  )
+                                ])
+                              ]
+                            )
                           ]
                         )
                       ]
-                    )
-                  ]
-                })
+                    })
+                  ],
+                  2
+                )
               ],
-              2
+              1
             )
-          ],
-          1
-        )
       ],
       1
     )

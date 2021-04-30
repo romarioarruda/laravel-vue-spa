@@ -26,7 +26,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             if (payload.id) {
                 commit('M/returnTaskToDo', payload)
-                resolve('Tarefa retornou para a lista de afazeres.')
+                resolve('Tarefa retornou para a lista de a fazeres.')
             } else {
                 reject('ID da tarefa não foi detectado')
             }
