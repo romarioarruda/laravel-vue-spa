@@ -11,6 +11,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 import Menu from './template/Menu'
 import ToDo from './todo/ToDo'
 import ToDoDoing from './todo/ToDoDoing'
@@ -29,7 +30,22 @@ export default {
         }
 
         this.cronRefreshToken
+        this.getTodoByUser()
     },
+
+    methods: {
+        getTodoByUser () {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.get(`/public/api/todo/user/${this.user.userData.id}`).then(resp => {
+                this.$store.dispatch('todo/definingToDoList', resp.data)
+            }).catch(msg => {
+                this.$toasted.global.defaultError({
+                    msg: 'Erro: lista de tarefas a fazer não pode ser carregada/atualizada.'
+                })
+            })
+        }
+    },
+
     computed: {
         ...mapState({
             todo: state => state.todo,

@@ -4,6 +4,13 @@ const state = {
     listTodoFinished: []
 }
 const actions = {
+    definingToDoList ({commit}, payload) {
+        return new Promise((resolve) => {
+            commit('M/definingToDoList', payload)
+            resolve()
+        })
+    },
+
     setTaskDoing({commit}, payload) {
         return new Promise((resolve, reject) => {
             if (payload.id) {
@@ -61,6 +68,10 @@ const actions = {
 }
 
 const mutations = {
+    'M/definingToDoList' (state, payload) {
+        state.listTodo = payload
+    },
+
     'M/setTaskDoing' (state, payload) {
         state.listTodoDoing.unshift(payload)
 

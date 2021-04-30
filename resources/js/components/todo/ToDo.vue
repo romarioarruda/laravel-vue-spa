@@ -14,7 +14,7 @@
                     <template v-for="card in todoList">
                         <dnd-item :dnd-model="card" :key="card.id" :dnd-id="card.id">
                             <div class="card area-card" :key="card.id">
-                                <span>{{ card.name }}</span>
+                                <span>{{ card.titulo }}</span>
                                 <div class="area-buttons">
                                     <button @click="doing(card)" class="btn btn-outline-secondary btn-sm">Fazer</button>
                                     <button @click="finished(card)" class="btn btn-outline-success btn-sm">Concluir</button>
