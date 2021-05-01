@@ -4,7 +4,7 @@
             <h3 class="text-center">Concluídas</h3>
         </div>
         <div class="card-body">
-            <Loading v-if="loading" />
+            <Loading v-if="!todoListFinished.length" />
             <dnd-zone v-else vertical-search>
                 <dnd-container
                     :dnd-model="todoListFinished"
@@ -83,10 +83,6 @@ export default {
     },
 
     computed: {
-        loading () {
-            return !this.todoListFinished.length
-        },
-
         ...mapGetters('user', [
             'getFullToken'
         ])

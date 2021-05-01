@@ -2211,11 +2211,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todo/".concat(payload.id));
     }
   },
-  computed: _objectSpread({
-    loading: function loading() {
-      return !this.todoList.length;
-    }
-  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2322,11 +2318,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todoing/".concat(payload.id));
     }
   },
-  computed: _objectSpread({
-    loading: function loading() {
-      return !this.todoListDoing.length;
-    }
-  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2450,11 +2442,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todofinished/".concat(payload.id));
     }
   },
-  computed: _objectSpread({
-    loading: function loading() {
-      return !this.todoListFinished.length;
-    }
-  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -40301,7 +40289,7 @@ var render = function() {
       "div",
       { staticClass: "card-body" },
       [
-        _vm.loading
+        !_vm.todoList.length
           ? _c("Loading")
           : _c(
               "dnd-zone",
@@ -40413,7 +40401,7 @@ var render = function() {
       "div",
       { staticClass: "card-body" },
       [
-        _vm.loading
+        !_vm.todoListDoing.length
           ? _c("Loading")
           : _c(
               "dnd-zone",
@@ -40528,7 +40516,7 @@ var render = function() {
       "div",
       { staticClass: "card-body" },
       [
-        _vm.loading
+        !_vm.todoListFinished.length
           ? _c("Loading")
           : _c(
               "dnd-zone",

@@ -4,7 +4,7 @@
             <h3 class="text-center">A Fazer</h3>
         </div>
         <div class="card-body">
-            <Loading v-if="loading" />
+            <Loading v-if="!todoList.length" />
             <dnd-zone v-else vertical-search>
                 <dnd-container
                     :dnd-model="todoList"
@@ -74,10 +74,6 @@ export default {
     },
 
     computed: {
-        loading () {
-            return !this.todoList.length
-        },
-
         ...mapGetters('user', [
             'getFullToken'
         ])
