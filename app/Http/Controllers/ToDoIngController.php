@@ -25,4 +25,11 @@ class ToDoIngController extends Controller
 
         return response()->json(['todoing' => 'created'], 201);
     }
+
+    public function listTodoPerUser(int $userId)
+    {
+        $todoByUser = ToDoIng::where('user_id', $userId)->get();
+
+        return $todoByUser ?? [];
+    }
 }

@@ -1993,6 +1993,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.cronRefreshToken;
     this.getTodoByUser();
+    this.getTodoingByUser();
   },
   methods: {
     getTodoByUser: function getTodoByUser() {
@@ -2003,7 +2004,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.$store.dispatch('todo/definingToDoList', resp.data);
       })["catch"](function (msg) {
         _this.$toasted.global.defaultError({
-          msg: 'Erro: lista de tarefas a fazer não pode ser carregada/atualizada.'
+          msg: 'Erro: lista de tarefas a fazer não está funcionando.'
+        });
+      });
+    },
+    getTodoingByUser: function getTodoingByUser() {
+      var _this2 = this;
+
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get("/public/api/todoing/user/".concat(this.user.userData.id)).then(function (resp) {
+        _this2.$store.dispatch('todo/definingToDoingList', resp.data);
+      })["catch"](function (msg) {
+        _this2.$toasted.global.defaultError({
+          msg: 'Erro: lista de tarefas sendo feitas não está funcionando.'
         });
       });
     }
@@ -2541,8 +2554,15 @@ var actions = {
       resolve();
     });
   },
-  setTaskDoing: function setTaskDoing(_ref2, payload) {
+  definingToDoingList: function definingToDoingList(_ref2, payload) {
     var commit = _ref2.commit;
+    return new Promise(function (resolve) {
+      commit('M/definingToDoingList', payload);
+      resolve();
+    });
+  },
+  setTaskDoing: function setTaskDoing(_ref3, payload) {
+    var commit = _ref3.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/setTaskDoing', payload);
@@ -2552,8 +2572,8 @@ var actions = {
       }
     });
   },
-  returnTaskToDo: function returnTaskToDo(_ref3, payload) {
-    var commit = _ref3.commit;
+  returnTaskToDo: function returnTaskToDo(_ref4, payload) {
+    var commit = _ref4.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/returnTaskToDo', payload);
@@ -2563,8 +2583,8 @@ var actions = {
       }
     });
   },
-  setTaskFinished: function setTaskFinished(_ref4, payload) {
-    var commit = _ref4.commit;
+  setTaskFinished: function setTaskFinished(_ref5, payload) {
+    var commit = _ref5.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/setTaskFinished', payload);
@@ -2574,8 +2594,8 @@ var actions = {
       }
     });
   },
-  returnTaskToDoing: function returnTaskToDoing(_ref5, payload) {
-    var commit = _ref5.commit;
+  returnTaskToDoing: function returnTaskToDoing(_ref6, payload) {
+    var commit = _ref6.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/returnTaskToDoing', payload);
@@ -2585,8 +2605,8 @@ var actions = {
       }
     });
   },
-  deleteTaskFinished: function deleteTaskFinished(_ref6, payload) {
-    var commit = _ref6.commit;
+  deleteTaskFinished: function deleteTaskFinished(_ref7, payload) {
+    var commit = _ref7.commit;
     return new Promise(function (resolve, reject) {
       if (payload) {
         commit('M/deleteTaskFinished', payload);
@@ -2598,6 +2618,9 @@ var actions = {
   }
 };
 var mutations = {
+  'M/definingToDoingList': function MDefiningToDoingList(state, payload) {
+    state.listTodoDoing = payload;
+  },
   'M/definingToDoList': function MDefiningToDoList(state, payload) {
     state.listTodo = payload;
   },

@@ -31,6 +31,7 @@ export default {
 
         this.cronRefreshToken
         this.getTodoByUser()
+        this.getTodoingByUser()
     },
 
     methods: {
@@ -40,7 +41,18 @@ export default {
                 this.$store.dispatch('todo/definingToDoList', resp.data)
             }).catch(msg => {
                 this.$toasted.global.defaultError({
-                    msg: 'Erro: lista de tarefas a fazer não pode ser carregada/atualizada.'
+                    msg: 'Erro: lista de tarefas a fazer não está funcionando.'
+                })
+            })
+        },
+
+        getTodoingByUser () {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.get(`/public/api/todoing/user/${this.user.userData.id}`).then(resp => {
+                this.$store.dispatch('todo/definingToDoingList', resp.data)
+            }).catch(msg => {
+                this.$toasted.global.defaultError({
+                    msg: 'Erro: lista de tarefas sendo feitas não está funcionando.'
                 })
             })
         }

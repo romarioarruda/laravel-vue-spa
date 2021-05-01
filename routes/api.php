@@ -20,5 +20,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/todo/{id}', [TodoController::class, 'removeTodo']);
 
+    Route::get('/todoing/user/{user_id}', [ToDoIngController::class, 'listTodoPerUser']);
     Route::post('/todoing/save', [ToDoIngController::class, 'save']);
 });

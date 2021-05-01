@@ -11,6 +11,13 @@ const actions = {
         })
     },
 
+    definingToDoingList ({commit}, payload) {
+        return new Promise((resolve) => {
+            commit('M/definingToDoingList', payload)
+            resolve()
+        })
+    },
+
     setTaskDoing({commit}, payload) {
         return new Promise((resolve, reject) => {
             if (payload.id) {
@@ -68,6 +75,10 @@ const actions = {
 }
 
 const mutations = {
+    'M/definingToDoingList' (state, payload) {
+        state.listTodoDoing = payload
+    },
+
     'M/definingToDoList' (state, payload) {
         state.listTodo = payload
     },
