@@ -10,5 +10,8 @@ class Todo extends Model
     use HasFactory;
 
     protected $table = 'todo';
+    
+    protected $fillable = ['id', 'titulo', 'user_id', 'created_at'];
+
     public $timestamps = false;
 }

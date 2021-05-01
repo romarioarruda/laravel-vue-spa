@@ -51,18 +51,26 @@ export default {
             axios.post('/public/api/todoing/save', payload)
         },
 
-        removeOnTodoDataBase (payload) {
-            axios.defaults.headers['authorization'] = this.getFullToken
-            axios.delete(`/public/api/todo/${payload.id}`)
-        },
-
         finished (payload) {
+            this.saveOnToDoFinishedDataBase(payload)
+            this.removeOnTodoDataBase(payload)
+
             this.$store.dispatch('todo/setTaskFinished', payload).then(resp => {
                 this.$toasted.global.defaultSuccess({ msg: resp })
             }).catch(msg => {
                 this.$toasted.global.defaultError({ msg: resp })
             })
-        }
+        },
+
+        saveOnToDoFinishedDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.post('/public/api/todofinished/save', payload)
+        },
+
+        removeOnTodoDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.delete(`/public/api/todo/${payload.id}`)
+        },
     },
 
     computed: {

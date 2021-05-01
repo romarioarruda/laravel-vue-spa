@@ -1994,6 +1994,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.cronRefreshToken;
     this.getTodoByUser();
     this.getTodoingByUser();
+    this.getTodoFinishedByUser();
   },
   methods: {
     getTodoByUser: function getTodoByUser() {
@@ -2017,6 +2018,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })["catch"](function (msg) {
         _this2.$toasted.global.defaultError({
           msg: 'Erro: lista de tarefas sendo feitas não está funcionando.'
+        });
+      });
+    },
+    getTodoFinishedByUser: function getTodoFinishedByUser() {
+      var _this3 = this;
+
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get("/public/api/todofinished/user/".concat(this.user.userData.id)).then(function (resp) {
+        _this3.$store.dispatch('todo/definingTodoFinishedList', resp.data);
+      })["catch"](function (msg) {
+        _this3.$toasted.global.defaultError({
+          msg: 'Erro: lista de tarefas finalizadas não está funcionando.'
         });
       });
     }
@@ -2174,13 +2187,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todoing/save', payload);
     },
-    removeOnTodoDataBase: function removeOnTodoDataBase(payload) {
-      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
-      axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todo/".concat(payload.id));
-    },
     finished: function finished(payload) {
       var _this2 = this;
 
+      this.saveOnToDoFinishedDataBase(payload);
+      this.removeOnTodoDataBase(payload);
       this.$store.dispatch('todo/setTaskFinished', payload).then(function (resp) {
         _this2.$toasted.global.defaultSuccess({
           msg: resp
@@ -2190,6 +2201,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           msg: resp
         });
       });
+    },
+    saveOnToDoFinishedDataBase: function saveOnToDoFinishedDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todofinished/save', payload);
+    },
+    removeOnTodoDataBase: function removeOnTodoDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todo/".concat(payload.id));
     }
   },
   computed: _objectSpread({
@@ -2212,7 +2231,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2243,15 +2271,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['todoListDoing'],
   components: {
-    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_0__.default
+    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_2__.default
   },
   methods: {
     returnToDo: function returnToDo(payload) {
       var _this = this;
 
+      this.saveOnToDoDataBase(payload);
+      this.removeOnTodoingDataBase(payload);
       this.$store.dispatch('todo/returnTaskToDo', payload).then(function (resp) {
         _this.$toasted.global.defaultInfo({
           msg: resp
@@ -2262,9 +2294,15 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
+    saveOnToDoDataBase: function saveOnToDoDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todo/save', payload);
+    },
     finished: function finished(payload) {
       var _this2 = this;
 
+      this.saveOnToDoFinishedDataBase(payload);
+      this.removeOnTodoingDataBase(payload);
       this.$store.dispatch('todo/setTaskFinished', payload).then(function (resp) {
         _this2.$toasted.global.defaultSuccess({
           msg: resp
@@ -2274,13 +2312,21 @@ __webpack_require__.r(__webpack_exports__);
           msg: resp
         });
       });
+    },
+    saveOnToDoFinishedDataBase: function saveOnToDoFinishedDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todofinished/save', payload);
+    },
+    removeOnTodoingDataBase: function removeOnTodoingDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todoing/".concat(payload.id));
     }
   },
-  computed: {
+  computed: _objectSpread({
     loading: function loading() {
       return !this.todoListDoing.length;
     }
-  }
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2296,7 +2342,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _template_Loading__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../template/Loading */ "./resources/js/components/template/Loading.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2328,15 +2383,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['todoListFinished'],
   components: {
-    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_0__.default
+    Loading: _template_Loading__WEBPACK_IMPORTED_MODULE_2__.default
   },
   methods: {
     returnToDo: function returnToDo(payload) {
       var _this = this;
 
+      this.saveOnToDoDataBase(payload);
+      this.removeOnTodoFinishedDataBase(payload);
       this.$store.dispatch('todo/returnTaskToDo', payload).then(function (resp) {
         _this.$toasted.global.defaultInfo({
           msg: resp
@@ -2350,6 +2409,8 @@ __webpack_require__.r(__webpack_exports__);
     returnToDoing: function returnToDoing(payload) {
       var _this2 = this;
 
+      this.saveOnToDoingDataBase(payload);
+      this.removeOnTodoFinishedDataBase(payload);
       this.$store.dispatch('todo/returnTaskToDoing', payload).then(function (resp) {
         _this2.$toasted.global.defaultInfo({
           msg: resp
@@ -2363,6 +2424,9 @@ __webpack_require__.r(__webpack_exports__);
     remove: function remove(id) {
       var _this3 = this;
 
+      this.removeOnTodoFinishedDataBase({
+        id: id
+      });
       this.$store.dispatch('todo/deleteTaskFinished', id).then(function (resp) {
         _this3.$toasted.global.defaultSuccess({
           msg: resp
@@ -2372,13 +2436,25 @@ __webpack_require__.r(__webpack_exports__);
           msg: resp
         });
       });
+    },
+    saveOnToDoDataBase: function saveOnToDoDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todo/save', payload);
+    },
+    saveOnToDoingDataBase: function saveOnToDoingDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/public/api/todoing/save', payload);
+    },
+    removeOnTodoFinishedDataBase: function removeOnTodoFinishedDataBase(payload) {
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.authorization) = this.getFullToken;
+      axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/public/api/todofinished/".concat(payload.id));
     }
   },
-  computed: {
+  computed: _objectSpread({
     loading: function loading() {
       return !this.todoListFinished.length;
     }
-  }
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('user', ['getFullToken']))
 });
 
 /***/ }),
@@ -2561,8 +2637,15 @@ var actions = {
       resolve();
     });
   },
-  setTaskDoing: function setTaskDoing(_ref3, payload) {
+  definingTodoFinishedList: function definingTodoFinishedList(_ref3, payload) {
     var commit = _ref3.commit;
+    return new Promise(function (resolve) {
+      commit('M/definingTodoFinishedList', payload);
+      resolve();
+    });
+  },
+  setTaskDoing: function setTaskDoing(_ref4, payload) {
+    var commit = _ref4.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/setTaskDoing', payload);
@@ -2572,8 +2655,8 @@ var actions = {
       }
     });
   },
-  returnTaskToDo: function returnTaskToDo(_ref4, payload) {
-    var commit = _ref4.commit;
+  returnTaskToDo: function returnTaskToDo(_ref5, payload) {
+    var commit = _ref5.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/returnTaskToDo', payload);
@@ -2583,8 +2666,8 @@ var actions = {
       }
     });
   },
-  setTaskFinished: function setTaskFinished(_ref5, payload) {
-    var commit = _ref5.commit;
+  setTaskFinished: function setTaskFinished(_ref6, payload) {
+    var commit = _ref6.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/setTaskFinished', payload);
@@ -2594,8 +2677,8 @@ var actions = {
       }
     });
   },
-  returnTaskToDoing: function returnTaskToDoing(_ref6, payload) {
-    var commit = _ref6.commit;
+  returnTaskToDoing: function returnTaskToDoing(_ref7, payload) {
+    var commit = _ref7.commit;
     return new Promise(function (resolve, reject) {
       if (payload.id) {
         commit('M/returnTaskToDoing', payload);
@@ -2605,8 +2688,8 @@ var actions = {
       }
     });
   },
-  deleteTaskFinished: function deleteTaskFinished(_ref7, payload) {
-    var commit = _ref7.commit;
+  deleteTaskFinished: function deleteTaskFinished(_ref8, payload) {
+    var commit = _ref8.commit;
     return new Promise(function (resolve, reject) {
       if (payload) {
         commit('M/deleteTaskFinished', payload);
@@ -2618,11 +2701,14 @@ var actions = {
   }
 };
 var mutations = {
+  'M/definingToDoList': function MDefiningToDoList(state, payload) {
+    state.listTodo = payload;
+  },
   'M/definingToDoingList': function MDefiningToDoingList(state, payload) {
     state.listTodoDoing = payload;
   },
-  'M/definingToDoList': function MDefiningToDoList(state, payload) {
-    state.listTodo = payload;
+  'M/definingTodoFinishedList': function MDefiningTodoFinishedList(state, payload) {
+    state.listTodoFinished = payload;
   },
   'M/setTaskDoing': function MSetTaskDoing(state, payload) {
     state.listTodoDoing.unshift(payload);

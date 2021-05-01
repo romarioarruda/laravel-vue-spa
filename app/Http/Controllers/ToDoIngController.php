@@ -7,6 +7,14 @@ use App\Models\ToDoIng;
 
 class ToDoIngController extends Controller
 {
+
+    public function listTodoPerUser(int $userId)
+    {
+        $todoByUser = ToDoIng::where('user_id', $userId)->get();
+
+        return $todoByUser ?? [];
+    }
+
     public function save(Request $request)
     {
         $this->validate($request, [
@@ -26,10 +34,10 @@ class ToDoIngController extends Controller
         return response()->json(['todoing' => 'created'], 201);
     }
 
-    public function listTodoPerUser(int $userId)
+    public function removeTodo(int $id)
     {
-        $todoByUser = ToDoIng::where('user_id', $userId)->get();
+        ToDoIng::where('id', $id)->delete();
 
-        return $todoByUser ?? [];
+        return response()->json([], 204);
     }
 }

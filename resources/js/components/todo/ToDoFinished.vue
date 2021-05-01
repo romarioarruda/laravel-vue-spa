@@ -29,12 +29,17 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 import Loading from '../template/Loading'
 export default {
     props: [ 'todoListFinished' ],
     components: { Loading },
     methods: {
         returnToDo (payload) {
+            this.saveOnToDoDataBase(payload)
+            this.removeOnTodoFinishedDataBase(payload)
+
             this.$store.dispatch('todo/returnTaskToDo', payload).then(resp => {
                 this.$toasted.global.defaultInfo({ msg: resp })
             }).catch(msg => {
@@ -42,6 +47,9 @@ export default {
             })
         },
         returnToDoing (payload) {
+            this.saveOnToDoingDataBase(payload)
+            this.removeOnTodoFinishedDataBase(payload)
+
             this.$store.dispatch('todo/returnTaskToDoing', payload).then(resp => {
                 this.$toasted.global.defaultInfo({ msg: resp })
             }).catch(msg => {
@@ -49,18 +57,39 @@ export default {
             })
         },
         remove (id) {
+            this.removeOnTodoFinishedDataBase({ id })
+
             this.$store.dispatch('todo/deleteTaskFinished', id).then(resp => {
                 this.$toasted.global.defaultSuccess({ msg: resp })
             }).catch(msg => {
                 this.$toasted.global.defaultError({ msg: resp })
             })
-        }
+        },
+
+        saveOnToDoDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.post('/public/api/todo/save', payload)
+        },
+
+        saveOnToDoingDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.post('/public/api/todoing/save', payload)
+        },
+
+        removeOnTodoFinishedDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.delete(`/public/api/todofinished/${payload.id}`)
+        },
     },
 
     computed: {
         loading () {
             return !this.todoListFinished.length
-        }
+        },
+
+        ...mapGetters('user', [
+            'getFullToken'
+        ])
     }
 }
 </script>

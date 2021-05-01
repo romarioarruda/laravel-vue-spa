@@ -28,31 +28,60 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 import Loading from '../template/Loading'
+
 export default {
     props: [ 'todoListDoing' ],
     components: { Loading },
     methods: {
         returnToDo (payload) {
+            this.saveOnToDoDataBase(payload)
+            this.removeOnTodoingDataBase(payload)
+
             this.$store.dispatch('todo/returnTaskToDo', payload).then(resp => {
                 this.$toasted.global.defaultInfo({ msg: resp })
             }).catch(msg => {
                 this.$toasted.global.defaultError({ msg: resp })
             })
         },
+
+        saveOnToDoDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.post('/public/api/todo/save', payload)
+        },
+
         finished (payload) {
+            this.saveOnToDoFinishedDataBase(payload)
+            this.removeOnTodoingDataBase(payload)
+
             this.$store.dispatch('todo/setTaskFinished', payload).then(resp => {
                 this.$toasted.global.defaultSuccess({ msg: resp })
             }).catch(msg => {
                 this.$toasted.global.defaultError({ msg: resp })
             })
-        }
+        },
+
+        saveOnToDoFinishedDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.post('/public/api/todofinished/save', payload)
+        },
+
+        removeOnTodoingDataBase (payload) {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.delete(`/public/api/todoing/${payload.id}`)
+        },
     },
 
     computed: {
         loading () {
             return !this.todoListDoing.length
-        }
+        },
+
+        ...mapGetters('user', [
+            'getFullToken'
+        ])
     }
 }
 </script>

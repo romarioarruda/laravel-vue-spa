@@ -32,6 +32,7 @@ export default {
         this.cronRefreshToken
         this.getTodoByUser()
         this.getTodoingByUser()
+        this.getTodoFinishedByUser()
     },
 
     methods: {
@@ -53,6 +54,17 @@ export default {
             }).catch(msg => {
                 this.$toasted.global.defaultError({
                     msg: 'Erro: lista de tarefas sendo feitas não está funcionando.'
+                })
+            })
+        },
+
+        getTodoFinishedByUser () {
+            axios.defaults.headers['authorization'] = this.getFullToken
+            axios.get(`/public/api/todofinished/user/${this.user.userData.id}`).then(resp => {
+                this.$store.dispatch('todo/definingTodoFinishedList', resp.data)
+            }).catch(msg => {
+                this.$toasted.global.defaultError({
+                    msg: 'Erro: lista de tarefas finalizadas não está funcionando.'
                 })
             })
         }
