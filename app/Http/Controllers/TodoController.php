@@ -18,4 +18,11 @@ class TodoController extends Controller
 
         return $todoByUser ?? [];
     }
+
+    public function removeTodo(int $id)
+    {
+        Todo::where('id', $id)->delete();
+
+        return response()->json([], 204);
+    }
 }

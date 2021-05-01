@@ -15,9 +15,6 @@ class LoginController extends Controller
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required'
-        ],[
-            'email.required' => "O e-mail é obrigatório",
-            'password.required' => "A senha é obrigatória"
         ]);
 
         $credentials = $request->only('email', 'password');
