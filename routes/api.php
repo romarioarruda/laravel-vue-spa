@@ -9,6 +9,7 @@ use App\Http\Controllers\ToDoIngController;
 use App\Http\Controllers\TodoFinishedController;
 
 
+Route::post('/saveUser', [UserController::class, 'saveUser']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 

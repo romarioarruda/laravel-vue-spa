@@ -2,10 +2,14 @@
     <div class="container mt-5 row justify-content-center">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Área de login</h3>
+                <h3 class="text-center">Área de cadastro</h3>
             </div>
             <div class="card-body">
                 <form class="col-12">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" aria-describedby="nameHelp" v-model="name">
+                    </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">E-mail</label>
                         <input type="email" class="form-control" id="email" aria-describedby="emailHelp" v-model="mail">
@@ -19,8 +23,8 @@
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         Logando...
                     </button>
-                    <button v-else @click.prevent="login" :loading="loading" class="btn btn-primary">Logar</button>
-                    <a href="/public/#/cadastro" class="btn btn-link" style="float: right;">Cadastrar novo usuário</a>
+                    <button v-else @click.prevent="cadastro" :loading="loading" class="btn btn-primary">Cadastrar</button>
+                    <a href="/public/#/" class="btn btn-link" style="float: right;">Área de login</a>
                 </form>
             </div>
         </div>
@@ -30,31 +34,29 @@
 <script>
 import axios from 'axios'
 export default {
-    name: 'formlogin',
+    name: 'formcadastro',
     data () {
         return {
             loading: false,
+            name: '',
             mail: '',
             pass: ''
         }
     },
     methods: {           
-        login () {
+        cadastro () {
             this.loading = true
             try {
                 this.validate
                 const payload = {
+                    name: this.name,
                     email: this.mail,
                     password: this.pass
                 }
 
-                axios.post('/public/api/login', payload).then(resp => {
+                axios.post('/public/api/saveUser', payload).then(resp => {
                     this.loading = false
-                    if (resp.data.token) {
-                        this.$store.dispatch('user/setAccessToken', resp.data.token)
-                        this.$store.dispatch('user/setUserData', resp.data.user)
-                        this.$router.push({ name: 'todo' })
-                    }
+                    this.$router.push({ name: 'formlogin' })
                 }).catch(msg => {
                     this.loading = false
                     this.$toasted.global.defaultError({ msg: msg.response.data.error })
@@ -67,6 +69,7 @@ export default {
     },
     computed: {
         validate () {
+            if (!this.name.length) throw 'Preencha o campo nome'
             if (!this.mail.length) throw 'Preencha o campo e-mail'
             if (!this.mail.match(/\w+@\w+/igs)) throw 'Digite um e-mail válido'
             if (!this.pass.length) throw 'Preencha o campo senha'

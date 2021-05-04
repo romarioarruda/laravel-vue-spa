@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -17,7 +18,7 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = ['email' => $request->email];
 
         $user = User::where($credentials)->first();
 
@@ -25,12 +26,15 @@ class LoginController extends Controller
             return response()->json(['error' => 'Usuário não identificado.'], 404);
         }
 
-        if (!$token = auth('api')->login($user)) {
-            return response()->json(['error' => 'Login unauthorized'], 401);
+        if (Hash::check($request->password, $user->password)) {
+            if (!$token = auth('api')->login($user)) {
+                return response()->json(['error' => 'Login unauthorized'], 401);
+            }
+    
+            return $this->respondWithToken($token, $user);
         }
 
-        return $this->respondWithToken($token, $user);
-        
+        return response()->json(['error' => 'E-mail ou senha inválidos.'], 401);
     }
 
     protected function respondWithToken($token, $user)
