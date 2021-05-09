@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Todo;
 
 class TodoController extends Controller
@@ -10,9 +11,12 @@ class TodoController extends Controller
 
     public function listTodoPerUser(int $userId)
     {
-        $todoByUser = Todo::where('user_id', $userId)->get();
+        $expiration = 60; // minute
+        $key = 'todo_'.$userId;
 
-        return $todoByUser ?? [];
+        return Cache::remember($key, $expiration, function () use ($userId) {
+            return Todo::where('user_id', $userId)->get();
+        });
     }
 
     public function save(Request $request)

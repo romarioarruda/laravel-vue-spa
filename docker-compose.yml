@@ -38,3 +38,8 @@ services:
             PMA_PORT: 3306
         depends_on:
             - mysql_db
+    redis:
+        container_name: redis_db
+        image: redis:latest
+        ports: 
+            - 6379:6379

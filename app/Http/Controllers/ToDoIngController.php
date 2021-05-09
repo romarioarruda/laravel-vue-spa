@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\ToDoIng;
 
 class ToDoIngController extends Controller
@@ -10,9 +11,12 @@ class ToDoIngController extends Controller
 
     public function listTodoPerUser(int $userId)
     {
-        $todoByUser = ToDoIng::where('user_id', $userId)->get();
+        $expiration = 60; // minute
+        $key = 'todoing_'.$userId;
 
-        return $todoByUser ?? [];
+        return Cache::remember($key, $expiration, function () use ($userId) {
+            return ToDoIng::where('user_id', $userId)->get();
+        });
     }
 
     public function save(Request $request)
