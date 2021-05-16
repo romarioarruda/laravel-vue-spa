@@ -2,13 +2,13 @@ Este projeto é uma aplicação web com controle de acesso de usuários e contro
 
 Foram usados neste projeto:
 
-1 - Laravel
-2 - Vue.js
-3 - Vuex
-4 - MySQL
-5 - Redis
-6 - Docker and Docker Compose
-7 - Bootstrap V4
+1. Laravel
+2. Vue.js
+3. Vuex
+4. MySQL
+5. Redis
+6. Docker and Docker Compose
+7. Bootstrap V4
 
 Preparando o ambiente:
 
